@@ -1,57 +1,56 @@
-from fastapi import FastAPI, HTTPException
+import os
+from fastapi import FastAPI, HTTPException, Depends, Security
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import joblib
 from app.pii_masker import PIIMasker
 
-# 1. Define the Input Format (The Contract)
+# 1. Define the Input/Output
 class EmailRequest(BaseModel):
     text: str
 
-# 2. Define the Output Format
 class EmailResponse(BaseModel):
     original_text: str
     masked_text: str
     category: str
     confidence_score: float
 
-# 3. Initialize the App
+# 2. Initialize App
 app = FastAPI(title="Enterprise PII & Classification API")
+security = HTTPBearer() # This handles the "Bearer Token" security standard
 
-# 4. Global Variables to hold our brains
+# 3. Global Variables
 model = None
 masker = None
 
 @app.on_event("startup")
 def load_resources():
-    """
-    Load the heavy AI models once when the server starts.
-    This prevents reloading them for every single request (which is slow).
-    """
     global model, masker
-    print("⏳ Loading AI Models...")
-    
-    # Load the PII Shield
     masker = PIIMasker()
-    
-    # Load the Trained Brain
     model = joblib.load("models/email_classifier.pkl")
     print("✅ System Ready!")
 
+# ================= SECURITY LAYER =================
+def verify_api_key(credentials: HTTPAuthorizationCredentials = Security(security)):
+    """
+    The Bouncer. checks if the token matches our secret password.
+    """
+    token = credentials.credentials
+    # We get the real password from the Environment Variables (Secure Storage)
+    correct_key = os.getenv("API_SECRET", "default_insecure_key")
+    
+    if token != correct_key:
+        raise HTTPException(status_code=403, detail="⛔ Access Denied: Invalid API Key")
+    return token
+# ==================================================
+
 @app.post("/classify", response_model=EmailResponse)
-def classify_email(request: EmailRequest):
+def classify_email(request: EmailRequest, token: str = Depends(verify_api_key)):
     """
-    The main endpoint. 
-    Flow: Raw Text -> PII Mask -> Classification -> JSON Response
+    Now this endpoint requires a valid API Key to work!
     """
-    # Step 1: Protection (Mask PII)
     clean_text = masker.mask_all(request.text)
-    
-    # Step 2: Prediction (Ask the Brain)
-    # The model expects a list of texts, so we wrap it in [ ]
     prediction = model.predict([clean_text])[0]
-    
-    # Step 3: Confidence (How sure are we?)
-    # model.predict_proba gives probabilities for all classes. We take the max one.
     probs = model.predict_proba([clean_text])[0]
     confidence = max(probs)
     
@@ -64,4 +63,4 @@ def classify_email(request: EmailRequest):
 
 @app.get("/")
 def health_check():
-    return {"status": "running", "message": "Email Classifier is online."}
+    return {"status": "running", "message": "Email Classifier is online. Auth required for /classify."}
