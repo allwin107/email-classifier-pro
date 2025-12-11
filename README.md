@@ -115,21 +115,28 @@ Response:
 }
 ```
 
-## Project Structure
+## 📂 Project Structure
 
+```bash
 email-classifier-pro/
-├── app/
-│   ├── main.py          # FastAPI Backend Entrypoint
-│   ├── frontend.py      # Streamlit Dashboard
-│   ├── pii_masker.py    # Privacy Logic (Regex + Spacy)
-│   └── train_model.py   # ML Training Pipeline
+│
+├── app/                        # Source Code
+│   ├── main.py                 # FastAPI Backend (The Brain)
+│   ├── frontend.py             # Streamlit Dashboard (The Face)
+│   ├── pii_masker.py           # PII Shield Logic
+│   └── train_model.py          # Model Training Script
+│
 ├── data/
-│   └── enterprise_emails.csv  # Training Dataset (Ignored in Git)
+│   └── enterprise_emails.csv   # Dataset (Ignored in Git)
+│
 ├── models/
-│   └── email_classifier.pkl   # Serialized Model
-├── .env                 # Secrets (Ignored in Git)
-├── requirements.txt     # Dependency List
-└── README.md            # Documentation
+│   └── email_classifier.pkl    # Trained Model File
+│
+├── .env                        # API Keys & Secrets (Ignored in Git)
+├── .gitignore                  # Git Configuration
+├── requirements.txt            # Python Dependencies
+└── README.md                   # Project Documentation
+```
 
 # License
 This project is licensed under the MIT License - see the LICENSE file for details.
