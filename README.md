@@ -75,7 +75,7 @@ python -m spacy download en_core_web_sm
 Create a .env file in the root directory:
 ```bash
 API_SECRET=your_secret_key
-API_URL=[http://127.0.0.1:8000](http://127.0.0.1:8000)
+API_URL= http://127.0.0.1:8000
 API_KEY=your_secret_key
 ```
 
