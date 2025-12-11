@@ -1,0 +1,13 @@
+text,label
+"Hi IT, my laptop screen is flickering since Monday. Can you help?",Incident
+"I need a new mouse and keyboard for the new intern joining tomorrow.",Request
+"URGENT: The wifi on the 3rd floor is down completely.",Incident
+"Can you please reset my password? My username is john.doe@example.com.",Request
+"My credit card 4555-6666-7777-8888 was charged twice for the software license.",Problem
+"Please install VS Code on my machine. My employee ID is 12345.",Request
+"The printer is making a loud noise and jamming paper.",Incident
+"I am unable to login to the HR portal. It says 'Access Denied'.",Problem
+"Hi, I lost my access badge near the cafeteria.",Incident
+"Can we schedule a maintenance window for the server upgrade?",Change
+"My phone number is 987-654-3210, call me if you need details.",Problem
+"Requesting access to the JIRA project board for the new project.",Request
