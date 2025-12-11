@@ -50,7 +50,7 @@ Follow these steps to run the system on your machine.
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/allwin107/email-classifier-pro.git](https://github.com/allwin107/email-classifier-pro.git)
+git clone https://github.com/allwin107/email-classifier-pro.git
 cd email-classifier-pro
 ```
 
